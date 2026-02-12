@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Meter - 4E Audit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f4f9f9; color: #4a5568; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { 
+            -webkit-appearance: none; height: 26px; width: 26px; border-radius: 50%; 
+            background: #8ec3c3; cursor: pointer; margin-top: -9px; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #e2eeee; border-radius: 10px; }
+        .label-skala { font-size: 10px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <div class="max-w-md mx-auto min-h-screen bg-white shadow-xl flex flex-col pb-10">
+        
+        <div class="p-8 text-center bg-[#8ec3c3] text-white rounded-b-[3rem] shadow-md">
+            <h1 class="text-2xl font-black mb-2 tracking-tight">💎 Energy Meter</h1>
+            <p class="text-sm text-white/90 leading-relaxed">
+                Cari tau apakah kesibukanmu saat ini adalah <b>Bakat</b> atau justru <b>Beban</b>.
+            </p>
+        </div>
+
+        <div class="px-6 pt-8">
+            <div class="bg-blue-50 border-l-4 border-[#8ec3c3] p-4 rounded-r-xl mb-8">
+                <h3 class="text-xs font-bold text-[#5a8f8f] uppercase mb-1 font-black">CARA PAKAI:</h3>
+                <p class="text-[11px] leading-relaxed mb-3 text-gray-600">
+                    1. Tulis atau pilih kegiatanmu.<br>
+                    2. Geser tombol ke <b>Kanan (maks. 10)</b> jika sangat suka.<br>
+                    3. Geser tombol ke <b>Kiri (min. 1)</b> jika sangat tidak suka.
+                </p> 
+            </div>
+
+	    <div class="bg-white rounded-2xl shadow-sm border border-[#d1e7e7] p-5 mb-6">
+                <label class="block text-sm font-black mb-2 ml-1 text-gray-700 uppercase tracking-wide">Kegiatan apa yang mau dicek?</label>
+                <input type="text" id="activity" placeholder="Ketik di sini atau pilih contoh di bawah..." 
+                       class="w-full px-5 py-4 rounded-2xl bg-gray-50 border-2 border-transparent focus:border-[#8ec3c3] focus:bg-white outline-none transition-all text-sm shadow-inner italic">
+                
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <button onclick="setAct('Input data keuangan')" class="text-[10px] bg-white border border-[#d1e7e7] px-3 py-1.5 rounded-full hover:bg-[#e6f2f2] transition shadow-sm font-medium">📝 Input data</button>
+                    <button onclick="setAct('Presentasi depan tim')" class="text-[10px] bg-white border border-[#d1e7e7] px-3 py-1.5 rounded-full hover:bg-[#e6f2f2] transition shadow-sm font-medium">🎤 Presentasi</button>
+                    <button onclick="setAct('Menemani curhat teman')" class="text-[10px] bg-white border border-[#d1e7e7] px-3 py-1.5 rounded-full hover:bg-[#e6f2f2] transition shadow-sm font-medium">👂 Dengerin curhat</button>
+                </div>
+            </div>
+
+            <div class="space-y-10 px-1">
+                
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-sm font-black text-gray-800 uppercase">😊 ENJOY (Suka?)</span>
+                        <span class="text-2xl font-black text-[#8ec3c3]" id="v1">5</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mb-3 italic">"Seberapa bahagia kamu saat melakukan ini?"</p>
+                    <input type="range" min="1" max="10" value="5" id="s1" oninput="calculate()">
+                    <div class="flex justify-between mt-1 px-1">
+                        <span class="label-skala">1 (Benci)</span>
+                        <span class="label-skala">5 (Biasa)</span>
+                        <span class="label-skala">10 (Suka Banget)</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-sm font-black text-gray-800 uppercase">⚡ EASY (Gampang?)</span>
+                        <span class="text-2xl font-black text-[#8ec3c3]" id="v2">5</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mb-3 italic">"Seberapa mudah kamu menguasai ini?"</p>
+                    <input type="range" min="1" max="10" value="5" id="s2" oninput="calculate()">
+                    <div class="flex justify-between mt-1 px-1">
+                        <span class="label-skala">1 (Sulit)</span>
+                        <span class="label-skala">5 (Biasa)</span>
+                        <span class="label-skala">10 (Gampang Pol)</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-sm font-black text-gray-800 uppercase">🏆 EXCELLENT (Hasil?)</span>
+                        <span class="text-2xl font-black text-[#8ec3c3]" id="v3">5</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mb-3 italic">"Seberapa sering orang memuji hasil kerjamu?"</p>
+                    <input type="range" min="1" max="10" value="5" id="s3" oninput="calculate()">
+                    <div class="flex justify-between mt-1 px-1">
+                        <span class="label-skala">1 (Berantakan)</span>
+                        <span class="label-skala">5 (Rata-rata)</span>
+                        <span class="label-skala">10 (Sempurna)</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-sm font-black text-gray-800 uppercase">💰 EARN (Manfaat?)</span>
+                        <span class="text-2xl font-black text-[#8ec3c3]" id="v4">5</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mb-3 italic">"Seberapa besar dampak atau hasil (uang/pahala)nya?"</p>
+                    <input type="range" min="1" max="10" value="5" id="s4" oninput="calculate()">
+                    <div class="flex justify-between mt-1 px-1">
+                        <span class="label-skala">1 (Sia-sia)</span>
+                        <span class="label-skala">5 (Lumayan)</span>
+                        <span class="label-skala">10 (Penting Banget)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultBox" class="mt-12 p-8 rounded-[2.5rem] text-center border-2 border-dashed border-gray-200 bg-gray-50 transition-all duration-500 shadow-sm">
+                <h2 id="resTitle" class="text-xs font-black text-gray-400 tracking-[0.2em] uppercase mb-2">Analisa Energi Anda</h2>
+                <p id="resDesc" class="text-[13px] text-gray-500 italic leading-relaxed">Geser tombol di atas untuk melihat diagnosa...</p>
+                <div id="nextStep" class="hidden mt-6 pt-5 border-t border-black/5">
+                    <p class="text-[11px] font-black text-gray-600 uppercase mb-2">👉 Langkah Selanjutnya:</p>
+                    <p id="nextText" class="text-[12px] leading-relaxed text-gray-600"></p>
+                </div>
+            </div>
+
+            <div id="funnel" class="mt-8 opacity-0 pointer-events-none transition-all duration-700 transform translate-y-4">
+                <button onclick="window.location.href='jawaban.html'" class="w-full bg-[#8ec3c3] text-white font-black py-5 rounded-2xl shadow-lg hover:brightness-105 active:scale-95 transition-all text-sm uppercase tracking-widest">
+    			Kepoin Kenapa Bisa Begitu →
+		</button>
+                <p class="text-[10px] text-center mt-3 text-gray-400 font-bold uppercase tracking-tighter">Berdasarkan Metodologi Talents Mapping</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setAct(name) {
+            document.getElementById('activity').value = name;
+            calculate();
+        }
+
+        function calculate() {
+            const s = [1,2,3,4].map(i => parseInt(document.getElementById('s'+i).value));
+            s.forEach((val, i) => document.getElementById('v'+(i+1)).innerText = val);
+            
+            const total = s.reduce((a, b) => a + b, 0);
+            const box = document.getElementById('resultBox');
+            const title = document.getElementById('resTitle');
+            const desc = document.getElementById('resDesc');
+            const funnel = document.getElementById('funnel');
+            const nextStep = document.getElementById('nextStep');
+            const nextText = document.getElementById('nextText');
+
+            funnel.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            nextStep.classList.remove('hidden');
+
+            if (total >= 34) {
+                box.style.backgroundColor = "#e0f2f1"; box.style.borderColor = "#80cbc4";
+                title.innerText = "✨ MUTIARA TERPENDAM"; title.style.color = "#00695c";
+                desc.innerText = "Selamat! Ini adalah 'DNA' kekuatanmu. Kamu melakukannya dengan hati dan hasilnya luar biasa.";
+                nextText.innerText = "Jadikan ini prioritas utamamu. Fokus mengasah bakat ini menjadi jasa atau produk yang bernilai tinggi!";
+            } else if (total >= 22) {
+                box.style.backgroundColor = "#fffde7"; box.style.borderColor = "#fff176";
+                title.innerText = "⚖️ AREA KOMPETENSI"; title.style.color = "#af8600";
+                desc.innerText = "Kamu mahir melakukannya karena tuntutan, tapi ini bukan sumber kebahagiaanmu.";
+                nextText.innerText = "Lakukan secukupnya. Jangan habiskan seluruh waktu di sini karena kamu berisiko bosan dan lelah mental.";
+            } else {
+                box.style.backgroundColor = "#fff1f1"; box.style.borderColor = "#ffcdd2";
+                title.innerText = "⚠️ POTENSI BURNOUT"; title.style.color = "#c62828";
+                desc.innerText = "Hati-hati, ini adalah kelemahanmu. Memaksakan diri di sini akan menguras energimu dengan cepat.";
+                nextText.innerText = "Siasati! Cari rekan tim yang punya bakat di bidang ini untuk membantumu, sehingga kamu bisa fokus ke hal lain.";
+            }
+        }
+    </script>
+</body>
+</html>
